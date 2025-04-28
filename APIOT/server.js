@@ -10,20 +10,21 @@ app.use(express.json());
 
 let dbs;
 
-// Conexión a Mongo al iniciar
 connectMongo()
   .then(databases => {
     dbs = databases;
 
     const PORT = process.env.PORT || 4000;
-    app.listen(PORT, () => {
-      console.log(`🚀 API escuchando en el puerto ${PORT}`);
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      const address = server.address();
+      console.log(`🚀 API escuchando en ${address.address}:${address.port}`);
     });
   })
   .catch(async (error) => {
     console.error("🚨 No se pudo iniciar la API:", error.message);
     await enviarTelegram(`🚨 *Error crítico al iniciar API*: ${error.message}`);
   });
+
 
 // Endpoint GET
 app.get('/api/:db/:collection', async (req, res) => {

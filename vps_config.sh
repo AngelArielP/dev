@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Iniciando instalación de dependencias y arranque de servicios Node.js..."
+echo "🚀 Iniciando instalación de dependencias y servicios..."
 
 # Verificar si pm2 está instalado
 if ! command -v pm2 &> /dev/null
@@ -10,6 +10,10 @@ then
 else
     echo "✅ pm2 ya está instalado."
 fi
+
+# Borrar procesos anteriores
+echo "🧹 Eliminando procesos anteriores..."
+pm2 delete all
 
 # Instalar dependencias en APIOT
 echo "📦 Instalando dependencias en APIOT..."
@@ -23,20 +27,19 @@ cd ./ServerIoT
 npm install
 cd ..
 
-# Iniciar los dos servicios con nombres personalizados
-echo "🚀 Levantando servicio APIOT..."
-pm2 start ./APIOT/server.js --name APIOT
+pm2 flush
 
-echo "🚀 Levantando servicio SERVERIOT..."
-pm2 start ./ServerIoT/main.js --name SERVERIOT
+# Levantar todo con ecosystem
+echo "🚀 Levantando servicios con ecosystem.config.js..."
+pm2 start ecosystem.config.js
 
-# Guardar la configuración para reinicio automático
+# Guardar configuración
 echo "💾 Guardando estado de pm2..."
 pm2 save
 
-# Configurar pm2 para inicio automático en reinicio del servidor
-echo "🛠️ Configurando pm2 para inicio automático..."
+# Configurar pm2 para inicio automático
+echo "🛠️ Configurando pm2 para arranque automático..."
 pm2 startup
 
-echo "✅ Todo listo. Servicios corriendo en segundo plano."
+echo "✅ Todos los servicios Node.js corriendo en segundo plano."
 pm2 ls
