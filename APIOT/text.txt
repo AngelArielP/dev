@@ -1,0 +1,11 @@
+Ejemplo | Explicación
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26 | Listar todos los documentos
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26?desde=2025-04-26T00:00:00.000Z | Desde una fecha
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26?hasta=2025-04-26T23:59:59.999Z | Hasta una fecha
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26?desde=...&hasta=... | Entre dos fechas
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26?page=2&limit=50 | Página 2, 50 documentos
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26?tag=HuskyE_L2 | Filtrar solo documentos donde en data exista el tag = HuskyE_L2
+http://localhost:4000/api/RealtimePlanta1/realtime_data_2025_04_26?desde=...&hasta=...&tag=HuskyE_L2 | Filtro combinado fecha + tag
+
+
+    
