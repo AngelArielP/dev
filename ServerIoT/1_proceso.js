@@ -3,12 +3,12 @@ const { MongoClient } = require('mongodb');
 const { config } = require('dotenv');
 const { DateTime } = require('luxon'); // 👈 cambiamos a Luxon
 const proceso2 = require('./2_proceso');
+const procesoWM = require('./procesoWM');
+
 const { enviarTelegram } = require("./notificador");
 
 // Cargar .env
 config();
-
-const groupTags = ["OIMA2", "OIMA3", "OIMA4", "OIMA5", "HuskyA", "HuskyB", "HuskyC", "HuskyD", "HuskyE", "HuskyF", "HuskyG", "WM1", "WM2", "WM3"];
 
 let mongoClient;
 let mongoDB;
@@ -69,8 +69,19 @@ async function insertMessageAndTriggerRealtime(topic, payload) {
     };
     try {
         await collection.insertOne(doc);
-        console.log(`   ✅ Insertado en Datacruda (${collectionName})`);
-        await proceso2(doc);
+        console.log(`✅ Insertado en Datacruda (${collectionName})`);
+    
+        // 🔥 Aquí decides a qué proceso mandar
+        const tags = data.map(d => (d.tag || '').trim().toUpperCase());
+    
+        if (tags.some(t => t.startsWith('WM1') || t.startsWith('WM2') || t.startsWith('WM3'))) {
+          console.log('🛠 Enviando datos a procesoWM');
+          await procesoWM(doc);
+        } else {
+          console.log('🛠 Enviando datos a proceso2');
+          await proceso2(doc);
+        }
+    
     } catch (err) {
         console.error(`❌ Error insertando en Datacruda:`, err.message);
         await enviarTelegram(`❌ Error insertando en Datacruda (${collectionName}): ${err.message}`);
