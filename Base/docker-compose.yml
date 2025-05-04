@@ -1,0 +1,69 @@
+version: '3.9'
+
+x-common-env: &common-env
+  MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  PORT_MONGO: ${PORT_MONGO}
+  PORT_MQTT_DATASAVE: ${PORT_MQTT_DATASAVE}
+  PORT_DEPURACIONDB: ${PORT_DEPURACIONDB}
+  PORT_REMOVEDATOSDUP: ${PORT_REMOVEDATOSDUP}
+  PORT_IOTWS: ${PORT_IOTWS}
+  PORT_IOTAPIREST: ${PORT_IOTAPIREST}
+  GRAFANA_ROOT_USERNAME: ${GRAFANA_ROOT_USERNAME}
+  IP_PROD: ${IP_PROD}
+  IP_PROD2: ${IP_PROD2}
+  IP_LOCAL: ${IP_LOCAL}
+
+services:
+  mongodbIOT:
+    image: mongo:latest
+    container_name: mongodbIOT
+    volumes:
+      - mongodb_data_IOT:/data/db
+      - ./mongod.conf:/etc/mongo/mongod.conf
+      - /etc/localtime:/etc/localtime:ro
+    command: ["mongod", "--config", "/etc/mongo/mongod.conf"]
+    networks:
+      - IOT
+    environment:
+      <<: *common-env
+      TZ: "America/Mexico_City"
+    ports:
+      - "${PORT_MONGO}:${PORT_MONGO}"
+    restart: unless-stopped
+
+  portainerIOT:
+    image: portainer/portainer-ce:latest
+    container_name: portainerIOT
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data    
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      - IOT
+
+  grafanaIOT:
+    image: grafana/grafana:latest
+    container_name: grafanaIOT
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ROOT_USERNAME}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      - IOT
+
+volumes:
+  mongodb_data_IOT:
+  portainer_data:
+  grafana_data:
+
+networks:
+  IOT:
+    driver: bridge

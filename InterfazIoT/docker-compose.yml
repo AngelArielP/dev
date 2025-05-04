@@ -1,0 +1,12 @@
+services:
+  frontend_vue:
+    build: ./App  # Ruta a tu aplicación Vue.js
+    container_name: iot-frontend
+    ports:
+      - "8080:80"
+    networks:
+      - IOTWOW
+    restart: unless-stopped
+
+networks:
+  IOTWOW:

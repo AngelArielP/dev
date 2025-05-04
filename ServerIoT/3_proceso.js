@@ -24,21 +24,37 @@ async function initMongo() {
     throw err; // Muy importante relanzarlo para que se detenga el flujo
   }
 }
+function normalizarTag(tag) {
+  return (tag || '').trim().toUpperCase();
+}
 module.exports = async function proceso3({ maquina, nombreColeccion }) {
   console.log(`▶️ Ejecutando proceso 3 (limpieza de duplicados) para máquina: ${maquina}`);
 
   await initMongo();
-
   const collection = realtimeDB.collection(nombreColeccion);
-
   const documentos = await collection.find({ maquina }).sort({ timestamp: 1 }).toArray();
+
+  if (documentos.length === 0) {
+    console.warn(`[${maquina}] ⚠️ No se encontraron documentos para analizar.`);
+    await proceso4({ maquina, nombreColeccion });
+    return;
+  }
+
+  const maquinaTag = normalizarTag(`${maquina}_L2`);
+  const tieneTagL2 = documentos.some(doc => doc.data.some(d => normalizarTag(d.tag) === maquinaTag));
+
+  if (!tieneTagL2) {
+    console.log(`[${maquina}] 🚫 No se encontró el tag ${maquina}_L2, omitiendo limpieza de duplicados.`);
+    await proceso4({ maquina, nombreColeccion });
+    return;
+  }
 
   let lastValue = null;
   const documentosAEliminar = [];
   let firstZeroFound = false;
 
   for (const doc of documentos) {
-    const sensor = doc.data.find(d => d.tag === `${maquina}_L2`);
+    const sensor = doc.data.find(d => normalizarTag(d.tag) === maquinaTag);
     const sensorValue = sensor ? sensor.value : null;
 
     if (sensorValue === 0) {
@@ -60,10 +76,10 @@ module.exports = async function proceso3({ maquina, nombreColeccion }) {
 
   if (documentosAEliminar.length > 0) {
     const result = await collection.deleteMany({ _id: { $in: documentosAEliminar } });
-    console.log(`[${maquina}]   🔥 Eliminados ${result.deletedCount} documentos duplicados.`);
+    console.log(`[${maquina}] 🔥 Eliminados ${result.deletedCount} documentos duplicados.`);
   } else {
-    console.log(`[${maquina}]   ✅ No se encontraron duplicados.`);
+    console.log(`[${maquina}] ✅ No se encontraron duplicados.`);
   }
-  await proceso4({ maquina, nombreColeccion });
 
+  await proceso4({ maquina, nombreColeccion });
 };

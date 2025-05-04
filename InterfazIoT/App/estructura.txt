@@ -1,0 +1,61 @@
+├── .dockerignore
+├── .gitignore
+├── .vscode
+│   ├── extensions.json
+│   └── settings.json
+├── Dockerfile
+├── estructuraProyecto.js
+├── index.html
+├── jsconfig.json
+├── nginx.conf
+├── package-lock.json
+├── package.json
+├── public
+│   └── favicon.ico
+├── README.md
+├── src
+│   ├── App.vue
+│   ├── assets
+│   │   ├── base.css
+│   │   ├── logo.svg
+│   │   └── main.css
+│   ├── components
+│   │   ├── DataDev
+│   │   ├── HelloWorld.vue
+│   │   ├── Helpers
+│   │   ├── icons
+│   │   │   ├── IconCommunity.vue
+│   │   │   ├── IconDocumentation.vue
+│   │   │   ├── IconEcosystem.vue
+│   │   │   ├── IconSupport.vue
+│   │   │   └── IconTooling.vue
+│   │   ├── Management
+│   │   ├── TheWelcome.vue
+│   │   ├── WelcomeItem.vue
+│   │   └── Widgets
+│   ├── main.js
+│   ├── router
+│   │   └── index.js
+│   ├── services
+│   ├── store
+│   ├── utils
+│   │   └── tagAliases.js
+│   └── views
+│       ├── AboutPage.vue
+│       ├── HomePage.vue
+│       ├── LoginPage.vue
+│       └── TestView
+│           ├── ApiPage.vue
+│           ├── CiclosPage.vue
+│           ├── components
+│           │   ├── KpiCard.vue
+│           │   ├── ModalComponent.vue
+│           │   ├── wsComponent.vue
+│           │   ├── wsComponentWm.vue
+│           │   ├── wsInfoComponent.vue
+│           │   └── wsInfoComponentWm.vue
+│           ├── EventosPage.vue
+│           ├── HistoryPage.vue
+│           ├── MqttPage.vue
+│           └── RealtimePage.vue
+└── vite.config.js

@@ -68,25 +68,20 @@ async function insertMessageAndTriggerRealtime(topic, payload) {
         data
     };
     try {
-        await collection.insertOne(doc);
-        console.log(`✅ Insertado en Datacruda (${collectionName})`);
-    
-        // 🔥 Aquí decides a qué proceso mandar
-        const tags = data.map(d => (d.tag || '').trim().toUpperCase());
-    
-        if (tags.some(t => t.startsWith('WM1') || t.startsWith('WM2') || t.startsWith('WM3'))) {
-          console.log('🛠 Enviando datos a procesoWM');
-          await procesoWM(doc);
-        } else {
-          console.log('🛠 Enviando datos a proceso2');
-          await proceso2(doc);
-        }
-    
-    } catch (err) {
-        console.error(`❌ Error insertando en Datacruda:`, err.message);
-        await enviarTelegram(`❌ Error insertando en Datacruda (${collectionName}): ${err.message}`);
-    }
-}
+           await collection.insertOne(doc);
+           console.log(`   ✅ Insertado en Datacruda (${collectionName})`);
+   
+           // 🔥 Aquí decides a qué proceso mandar
+   
+           console.log('   🛠 Enviando datos a proceso2');
+           await proceso2(doc);
+   
+       } catch (err) {
+           console.error(` ❌ Error insertando en Datacruda:`, err.message);
+           await enviarTelegram(`  ❌ Error insertando en Datacruda (${collectionName}): ${err.message}`);
+       }
+   }
+   
 
 module.exports = async function proceso1() {
     await initMongo();
