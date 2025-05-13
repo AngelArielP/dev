@@ -12,6 +12,7 @@ export const tagAliases = {
   'WM1_MachineOnTime': { label: 'Machine switched on', unit: 'min' },
   'WM1_ProdLot': { label: 'Production lot', unit: '' },
   'WM1_ActPiecesProd': { label: 'Pieces produced (effective)', unit: 'pcs' },
+  'WM1_AP_PWS_D_ERROR': { label: 'Power ERROR', unit: 'pcs' },
   'WM1_PiecesDiff': { label: 'Difference pieces produced', unit: 'pcs' },
   'WM1_AvgSheetCons': { label: 'Average sheet consumption', unit: 'sheets' },
   'WM1_EnergyAbsorbed': { label: 'Energy absorbed in the last evaluation period', unit: 'kWh' },

@@ -1,12 +1,12 @@
 <template>
-    <div class="kpi-line">
-        <div class="kpi-card">
-            <apexchart class="apexchart" v-if="seriesData.length" type="line" width="100%" height="60" :options="chartOptions"
-                :series="[{ name: tag, data: seriesData }]" />
-            <div v-else class="no-data">Caragando ....</div>
-        </div>
-
+  <div class="kpi-line">
+    <div class="kpi-card">
+      <apexchart class="apexchart" v-if="seriesData.length" type="line" width="100%" height="60" :options="chartOptions"
+        :series="[{ name: tag, data: seriesData }]" />
+      <div v-else class="no-data">Caragando ....</div>
     </div>
+
+  </div>
 
 </template>
 
@@ -16,7 +16,7 @@ import ApexChart from 'vue3-apexcharts';
 import { connectWebSocket, onMessage } from '@/services/wsService';
 
 const props = defineProps({
-    tag: String
+  tag: String
 });
 
 const seriesData = ref([]);
@@ -24,43 +24,51 @@ const buffer = ref([]);
 let intervalId;
 
 onMounted(() => {
-    connectWebSocket();
+  connectWebSocket();
 
-    onMessage((data) => {
-        if (data.topic === "/topic/flexy/2233-0701-24/data") {
-            try {
-                const payload = JSON.parse(data.message);
+  onMessage((data) => {
+    if (data.topic === "/topic/flexy/2233-0701-24/data") {
+      try {
+        const payload = JSON.parse(data.message);
 
-                const puntos = Array.isArray(payload)
-                    ? payload.filter(p => p.tag === props.tag)
-                    : [payload].filter(p => p.tag === props.tag);
+        const puntos = Array.isArray(payload)
+          ? payload.filter(p => p.tag === props.tag)
+          : [payload].filter(p => p.tag === props.tag);
 
-                buffer.value.push(...puntos);
-            } catch (e) {
-                console.error("❌ Error al parsear MQTT:", e);
-            }
+        buffer.value.push(...puntos);
+      } catch (e) {
+        console.error("❌ Error al parsear MQTT:", e);
+      }
+    }
+  });
+
+  let lastValue = null; // ⬅️ Guarda el último valor agregado
+
+  intervalId = setInterval(() => {
+    if (!buffer.value.length) return;
+
+    const local = [...buffer.value];
+    buffer.value = [];
+
+    local.forEach(p => {
+      const y = Number(p.value);
+      const x = new Date(p.time || p.timestamp);
+
+      if (!isNaN(y)) {
+        // ✅ Solo agregamos si es distinto del anterior
+        if (lastValue !== y) {
+          lastValue = y;
+          seriesData.value.push({ x, y });
+          if (seriesData.value.length > 100) seriesData.value.shift();
         }
+      }
     });
+  }, 3000);
 
-    intervalId = setInterval(() => {
-        if (!buffer.value.length) return;
-
-        const local = [...buffer.value];
-        buffer.value = [];
-
-        local.forEach(p => {
-            const y = Number(p.value);
-            const x = new Date(p.time || p.timestamp);
-            if (!isNaN(y)) {
-                seriesData.value.push({ x, y });
-                if (seriesData.value.length > 60) seriesData.value.shift();
-            }
-        });
-    }, 3000);
 });
 
 onUnmounted(() => {
-    if (intervalId) clearInterval(intervalId);
+  if (intervalId) clearInterval(intervalId);
 });
 
 const formatter = (value) =>
@@ -101,27 +109,27 @@ const chartOptions = {
 
 <style scoped>
 .kpi-card {
-    padding: 12px 16px;
-    border-radius: 12px;
-    color: rgb(12, 4, 4);
-    background-color: #19875433;
-    min-width: 17rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  border-radius: 12px;
+  color: rgb(12, 4, 4);
+  background-color: #19875433;
+  min-width: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
 .kpi-line {
   width: 10px;
 }
 
 .no-data {
-    font-size: 12px;
-    color: gray;
-    text-align: center;
-}
-.apexchart {
-    width: 100%;
-    margin-top: auto;
+  font-size: 12px;
+  color: gray;
+  text-align: center;
 }
 
+.apexchart {
+  width: 100%;
+  margin-top: auto;
+}
 </style>

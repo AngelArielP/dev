@@ -150,7 +150,7 @@ watch(() => props.tag, fetchHistorical);
 
 <style scoped>
 .modal-content-grid {
-    width: 95vw;
+    width: auto;
     max-width: 86rem;
     padding: 0px 14px;
     border-radius: 14px;
@@ -215,7 +215,7 @@ watch(() => props.tag, fetchHistorical);
 
 .tag-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     /* 4 columnas */
     gap: 16px;
     padding: 16px;
