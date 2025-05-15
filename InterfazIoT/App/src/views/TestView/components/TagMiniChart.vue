@@ -113,9 +113,7 @@ const chartOptions = {
   color: rgb(12, 4, 4);
   background-color: #19875433;
   min-width: 8rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  margin:1rem;
 }
 
 .kpi-line {

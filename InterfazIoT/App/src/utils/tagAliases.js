@@ -25,6 +25,9 @@ export const tagAliases = {
   'WM1_TempHeatedPlate': { label: 'Heated plate actual temperature', unit: '°C' },
   'WM1_MachineStatus': { label: 'Machine status', unit: '' },
   'WM1_CycleCounter': { label: 'Cycle counter', unit: '' },
+  'WM1_AP_EjeXRobot_D_Error': { label: 'Error Robot', unit: '' },
+  'WM1_AP_APILADOR_D_E_E': { label: 'Error Apilador Robot', unit: '' },
+  'WM1_AP_UF_D_ERROR': { label: 'Error AP Robot', unit: '' },
 
   // WM2 (duplicated entries with same structure)
   'WM2_CycleTime': { label: 'Cycle time (Total machine cycle duration)', unit: 's' },

@@ -229,7 +229,6 @@ watch(() => props.tag, fetchHistorical);
     background: #3d427c22;
     /* tono verde muy suave */
     border-radius: 12px;
-    padding: 14px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
     min-height: 140px;
     transition: transform 0.2s ease;

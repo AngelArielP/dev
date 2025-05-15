@@ -1,7 +1,9 @@
 let socket = null;
 let messageHandlers = [];
 
-export function connectWebSocket(url = "ws://localhost:4001") {
+const API_BASE_URL = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:4001';
+
+export function connectWebSocket(url = API_BASE_URL) {
   socket = new WebSocket(url);
 
   socket.onopen = () => {
