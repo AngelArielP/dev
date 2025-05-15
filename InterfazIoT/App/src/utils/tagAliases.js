@@ -77,6 +77,27 @@ export const tagAliases = {
   'WM3_TempHeatedPlate': { label: 'Heated plate actual temperature', unit: '°C' },
   'WM3_MachineStatus': { label: 'Machine status', unit: '' },
   'WM3_CycleCounter': { label: 'Cycle counter', unit: '' },
+
+ // HUSKY A
+  'HuskyA_L1': { label: 'Modo de operación', unit: '' },
+  'HuskyA_L2': { label: 'Husillo', unit: '' },
+
+  // HUSKY B
+  'HuskyB_L1': { label: 'Modo de operación', unit: '' },
+  'HuskyB_L2': { label: 'Husillo', unit: '' },
+
+  // HUSKY C
+  'HuskyC_L1': { label: 'Modo de operación', unit: '' },
+  'HuskyC_L2': { label: 'Husillo', unit: '' },
+
+  // HUSKY F
+  'HuskyF_L1': { label: 'Modo de operación', unit: '' },
+  'HuskyF_L2': { label: 'Husillo', unit: '' },
+  
+  // OIMA3
+  'OIMA3_L1': { label: 'Modo de operación', unit: '' },
+  'OIMA3_L2': { label: 'Husillo', unit: '' }
+
 };
 
 export function getTagLabel(tag) {

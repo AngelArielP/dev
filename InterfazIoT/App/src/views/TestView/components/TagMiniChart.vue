@@ -59,7 +59,7 @@ onMounted(() => {
         if (lastValue !== y) {
           lastValue = y;
           seriesData.value.push({ x, y });
-          if (seriesData.value.length > 100) seriesData.value.shift();
+          if (seriesData.value.length > 50) seriesData.value.shift();
         }
       }
     });
